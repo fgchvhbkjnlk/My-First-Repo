@@ -2,6 +2,12 @@ let player;
 let platforms = [];
 let boxes = [];
 
+// Timer + Sophie's code
+let totalTime = 0; 
+let timeLimit = 60; 
+let timerInterval; // Variable to hold the interval ID
+let timerRunning = true; // Boolean to control the timer
+
 function setup() {
   createCanvas(600, 400);
   player = new Player();
@@ -20,10 +26,14 @@ function setup() {
   boxes.push(new Box(250, height - 170));
   boxes.push(new Box(50, height - 220));
   boxes.push(new Box(300, height - 280));
+
+  // Start the timer interval + Sophie's code
+  timerInterval = setInterval(updateTimer, 1000);
 }
 
 function draw() {
   background(220);
+  totalTime = millis(); // Start timer + Sophie's code
   
   // Display "Level One" text
   fill(0, 0, 255); // Blue color
@@ -50,11 +60,33 @@ function draw() {
       box.isTouched = true;
     }
   }
+  // Timer + Sophie's code
+  totalTime = int(totalTime/1000); // Converts it into seconds and integers
+  fill(255,0, 0); // Red colour
+  textSize(20);
+  textAlign(RIGHT);
+  text('Time Left:', 550, 12);
+  text(timeLimit - totalTime, 580, 12); // Displays the countdown
+
+  // Check if time limit has been reached + Sophie's code
+    if (totalTime >= timeLimit) {
+        fill(255,0, 0);
+        textAlign(CENTER);
+        textSize(40);
+        text('YOU FAILED', 300, 180);
+        stopTimer(); 
+      }
 }
 
 function keyPressed() {
   if (keyCode === 87) { // w key
     player.jump();
+  }
+}
+
+function updateTimer() { // Function to update the timer + Sophie's code
+  if (timerRunning) {
+    totalTime++;
   }
 }
 
