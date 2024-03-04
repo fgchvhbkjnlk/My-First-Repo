@@ -2,38 +2,61 @@ let player;
 let platforms = [];
 let boxes = [];
 
-// Timer + Sophie's code
-let totalTime = 0; 
-let timeLimit = 60; 
-let timerInterval; // Variable to hold the interval ID
-let timerRunning = true; // Boolean to control the timer
+const tileSize = 22; // Size of each tile in the tilemap
+let woodImage; // Image of wood for the tilemap
+
+// Define the tilemap grid
+const tileMap = [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  
+];
+
+function preload() {
+  grassImage = loadImage('wood.jpg'); // Load the wood image
+}
 
 function setup() {
   createCanvas(600, 400);
   player = new Player();
   
-  // Create platforms
-  platforms.push(new Platform(width / 2, height - 10, width, 20));
-  platforms.push(new Platform(100, height - 80, 80, 15));
-  platforms.push(new Platform(260, height - 150, 150, 15));
-  platforms.push(new Platform(50, height - 200, 120, 15));
-  platforms.push(new Platform(230, height - 270, 90, 15));
-  platforms.push(new Platform(500, height - 230, 200, 15));
-  
+  // Create platforms based on the tilemap
+  for (let row = 0; row < tileMap.length; row++) {
+    for (let col = 0; col < tileMap[row].length; col++) {
+      if (tileMap[row][col] === 1) {
+        let x = col * tileSize;
+        let y = row * tileSize;
+        platforms.push(new Platform(x + tileSize / 2, y + tileSize / 2, tileSize, tileSize));
+      }
+    }
+  }
+
   // Create boxes 
   boxes.push(new Box(width / 2, height - 70));
-  boxes.push(new Box(100, height - 100));
-  boxes.push(new Box(250, height - 170));
+  boxes.push(new Box(100, height - 110));
+  boxes.push(new Box(250, height - 175));
   boxes.push(new Box(50, height - 220));
   boxes.push(new Box(300, height - 280));
-
-  // Start the timer interval + Sophie's code
-  timerInterval = setInterval(updateTimer, 1000);
 }
 
 function draw() {
   background(220);
-  totalTime = millis(); // Start timer + Sophie's code
   
   // Display "Level One" text
   fill(0, 0, 255); // Blue color
@@ -60,33 +83,11 @@ function draw() {
       box.isTouched = true;
     }
   }
-  // Timer + Sophie's code
-  totalTime = int(totalTime/1000); // Converts it into seconds and integers
-  fill(255,0, 0); // Red colour
-  textSize(20);
-  textAlign(RIGHT);
-  text('Time Left:', 550, 12);
-  text(timeLimit - totalTime, 580, 12); // Displays the countdown
-
-  // Check if time limit has been reached + Sophie's code
-    if (totalTime >= timeLimit) {
-        fill(255,0, 0);
-        textAlign(CENTER);
-        textSize(40);
-        text('YOU FAILED', 300, 180);
-        stopTimer(); 
-      }
 }
 
 function keyPressed() {
   if (keyCode === 87) { // w key
     player.jump();
-  }
-}
-
-function updateTimer() { // Function to update the timer + Sophie's code
-  if (timerRunning) {
-    totalTime++;
   }
 }
 
@@ -171,9 +172,12 @@ class Platform {
   }
   
   display() {
-    fill(0);
-    rectMode(CENTER);
-    rect(this.x, this.y, this.width, this.height);
+    // Draw grass image as the tilemap
+    for (let row = 0; row < this.height / tileSize; row++) {
+      for (let col = 0; col < this.width / tileSize; col++) {
+        image(grassImage, this.x - this.width / 2 + col * tileSize, this.y - this.height / 2 + row * tileSize, tileSize, tileSize);
+      }
+    }
   }
 }
 
