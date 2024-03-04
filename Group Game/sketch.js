@@ -4,6 +4,8 @@ let boxes = [];
 
 const tileSize = 22; // Size of each tile in the tilemap
 let woodImage; // Image of wood for the tilemap
+let grassImage; // Image of grass for the tilemap
+let timer = 60;
 
 // Define the tilemap grid
 const tileMap = [
@@ -19,17 +21,20 @@ const tileMap = [
   [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   
 ];
 
 function preload() {
-  grassImage = loadImage('wood.jpg'); // Load the wood image
+  avatar = loadImage('avatar1.png');
+  woodImage = loadImage('wood.jpg'); // Load the wood image
+  grassImage = loadImage('grassy.png'); // Load the grass image
 }
 
 function setup() {
@@ -43,10 +48,14 @@ function setup() {
         let x = col * tileSize;
         let y = row * tileSize;
         platforms.push(new Platform(x + tileSize / 2, y + tileSize / 2, tileSize, tileSize));
+      } else if (tileMap[row][col] === 2) {
+        let x = col * tileSize;
+        let y = row * tileSize;
+        platforms.push(new Platform(x + tileSize / 2, y + tileSize / 2, tileSize, tileSize));
       }
     }
   }
-
+  
   // Create boxes 
   boxes.push(new Box(width / 2, height - 70));
   boxes.push(new Box(100, height - 110));
@@ -57,6 +66,7 @@ function setup() {
 
 function draw() {
   background(220);
+  totalTime = millis();
   
   // Display "Level One" text
   fill(0, 0, 255); // Blue color
@@ -83,10 +93,26 @@ function draw() {
       box.isTouched = true;
     }
   }
-}
+    textAlign(CENTER);
+    fill(255,0,0);
+    text("Time left: "+ timer, 530, 12);
+    //displays the amount of points in the left hand corner and the timer in the right hand corner
+    if (frameCount % 60 == 0 && timer>0){
+        timer--;
+    }
+    if(timer ==0){
+      textAlign(CENTER);
+      fill(255,0,0);
+      textSize(40);
+      text("You failed!", 300, 200);
+    }
+
+  
+  }
+
 
 function keyPressed() {
-  if (keyCode === 87) { // w key
+  if (keyCode === 32 ) { // w key
     player.jump();
   }
 }
@@ -95,7 +121,7 @@ class Player {
   constructor() {
     this.x = width / 2;
     this.y = height / 2;
-    this.size = 20;
+    this.size = 50;
     this.speedX = 3;
     this.speedY = 0;
     this.gravity = 0.2;
@@ -107,12 +133,12 @@ class Player {
     // gravity
     this.speedY += this.gravity;
     this.y += this.speedY;
-    
+  
     // horizontal movement
-    if (keyIsDown(65)) { // a key
+    if (keyIsDown(37)) { // a key
       this.x -= this.speedX;
     }
-    if (keyIsDown(68)) { // d key
+    if (keyIsDown(39)) { // d key
       this.x += this.speedX;
     }
     
@@ -124,8 +150,11 @@ class Player {
   
   display() {
     fill(255, 0, 0);
-    rectMode(CENTER);
-    rect(this.x, this.y, this.size, this.size);
+    push();
+    imageMode(CENTER);
+    image(avatar,this.x, this.y, this.size,this.size);
+    console.log(this.y);
+    pop();
   }
   
   // collision with platform
@@ -137,7 +166,7 @@ class Player {
       // If collided with the top of the platform
       if (this.y + this.size / 2 <= platform.y - platform.height / 2 + this.speedY) {
         this.y = platform.y - platform.height / 2 - this.size / 2;
-        this.speedY = 0;
+        this.speedY = -0.3;
         this.isJumping = false;
       } else { // If collided with the bottom of the platform
         this.y = platform.y + platform.height / 2 + this.size / 2;
@@ -171,11 +200,16 @@ class Platform {
     this.height = height;
   }
   
+  
   display() {
-    // Draw grass image as the tilemap
+    // Draw wood image as the tilemap
     for (let row = 0; row < this.height / tileSize; row++) {
       for (let col = 0; col < this.width / tileSize; col++) {
-        image(grassImage, this.x - this.width / 2 + col * tileSize, this.y - this.height / 2 + row * tileSize, tileSize, tileSize);
+        if (tileMap[Math.floor((this.y - this.height / 2 + row * tileSize) / tileSize)][Math.floor((this.x - this.width / 2 + col * tileSize) / tileSize)] === 1) {
+          image(woodImage, this.x - this.width / 2 + col * tileSize, this.y - this.height / 2 + row * tileSize, tileSize, tileSize);
+        } else if (tileMap[Math.floor((this.y - this.height / 2 + row * tileSize) / tileSize)][Math.floor((this.x - this.width / 2 + col * tileSize) / tileSize)] === 2) {
+          image(grassImage, this.x - this.width / 2 + col * tileSize, this.y - this.height / 2 + row * tileSize, tileSize, tileSize);
+        }
       }
     }
   }
