@@ -1,71 +1,78 @@
- let tilemap =[];
- let tileSize = 50;
+let tilemap =[];
+ const tileSize = 50;
+ let playerStartingX = 7; // X position for the player to start
+ let playerStartingY = 6; // Y position for the player to start
  let numAcross = 12;
  let numDown = 8;
  let textures =[];
+ let boxes = [];
  let timer = 60;
 
  let graphicsMap =[
 //   0  1  2  3  4  5  6  7  8  9  10 11
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//0
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//1
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//2
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//3
-    [0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],//4
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//5
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//6
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],//7
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//0
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//1
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//2
+    [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],//3
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//4
+    [0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],//5
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//6
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],//7
+    
  ]
 
  let tileRules =[
 //   0  1  2  3  4  5  6  7  8  9  10 11
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//0
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//1
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//2
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//3
-[0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],//4
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//5
-[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//6
-[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],//7
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//0
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//1
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//2
+    [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],//3
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//4
+    [0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],//5
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//6
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],//7
  ]
 
  let player;
  let playerSprite;
- let xSpeed =5;
+ let xSpeed = 5;
  let ySpeed = 10;
- let jumpHeight = 150;
+ let jumpHeight = 130;
  let playerSize = tileSize;
 
  function preload(){
     textures[0] = loadImage("clear.png");
     textures[1] = loadImage("platform.png");
-    bg = loadImage("background.jpg");
+    bg = loadImage("background.png");
     playerSprite = loadImage("avatar1.png");
+    toothbrushImage = loadImage("toothbrush.png");
+    coffeeImage = loadImage("coffee.png");
+
  }
 
  function setup(){
-    createCanvas(600,400);
-    let tileID= 0;
-    for (let across = 0; across < numAcross; across++) {
-        tilemap[across] = [];
-        for (let down = 0; down < numDown; down++) {
-            //Setting Texture For Tile
-            let textureNum = graphicsMap[down][across];
-    
-            //Initialising Tile
-            tilemap[across][down] = new Tile(textures[textureNum], across, down, tileSize, tileID); // THIS LINE CREATES OUR NEW TILE!
+  createCanvas(600,400);
+  let tileID= 0;
+  for (let across = 0; across < numAcross; across++) {
+  tilemap[across] = [];
+  for (let down = 0; down < numDown; down++) {
+  // Setting Texture For Tile
+  let textureNum = graphicsMap[down][across];
+  // Initialising Tile
+  tilemap[across][down] = new Tile(textures[textureNum], across, down, tileSize, tileID); // THIS LINE CREATES OUR NEW TILE!
 
-            tileID++;
-        }
-    } //Tile creation finished
+  tileID++;
+   }
+} // Tile creation finished
 
-    player = new Player(playerSprite,3,2,tileSize, xSpeed, ySpeed, jumpHeight, tileSize, tileRules);
-
+// Create boxes 
+boxes.push(new Box(120, height - 200, toothbrushImage));
+boxes.push(new Box(320, height - 300, coffeeImage));
+player = new Player(playerSprite, playerStartingX, playerStartingY, tileSize, xSpeed, ySpeed, jumpHeight, tileSize, tileRules);
  }
 
  function draw(){
     background(bg);
- 
     for (let across = 0; across < numAcross; across++) {
         for (let down = 0; down < numDown; down++) {
             tilemap[across][down].display(); // runs display() method for each tile!
@@ -74,6 +81,15 @@
     }
     player.display();
     player.update();
+    for (let box of boxes) {
+      box.display();
+      
+      // Check for collision with player
+      if (player.checkCollisionBox(box)) {
+        box.isTouched = true;
+      }
+    }
+
     push();
     textAlign(CENTER);
     fill(255);
@@ -92,6 +108,9 @@
       text("You failed!", 300, 200);
       pop();
     }
+
+
+
  }
 
 function keyPressed(){
@@ -131,6 +150,14 @@ class Player{
         this.bottomRight = {};
         this.collisionXPadding = 10;
         this.collisionYPadding = 5;
+    }
+
+    checkCollisionBox(box) {
+      let distance = dist(this.xPos, this.yPos, box.x, box.y);
+      if (distance < this.size / 2 + box.size / 2) {
+        return true;
+      }
+      return false;
     }
 
     update(){
@@ -351,3 +378,22 @@ class Tile {
         text(this.tileID, this.xPos, this.yPos);
     } // I've hidden the DEBUG method but this is where the code for it goes!
 }
+
+class Box {
+  constructor(x, y, image) {
+    this.x = x;
+    this.y = y;
+    this.size = 50;
+    this.image = image;
+    this.isTouched = false;
+  }
+  
+  display() {
+    if (!this.isTouched) {
+      push();
+    imageMode(CENTER);
+    pop();
+    image(this.image, this.x, this.y, this.size, this.size);
+       }
+     }
+    }
