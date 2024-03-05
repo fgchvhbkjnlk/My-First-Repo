@@ -1,8 +1,9 @@
-let tilemap =[];
+ let tilemap =[];
  let tileSize = 50;
  let numAcross = 12;
  let numDown = 8;
  let textures =[];
+ let timer = 60;
 
  let graphicsMap =[
 //   0  1  2  3  4  5  6  7  8  9  10 11
@@ -32,18 +33,18 @@ let tilemap =[];
  let playerSprite;
  let xSpeed =5;
  let ySpeed = 10;
- let jumpHeight = 100;
+ let jumpHeight = 150;
  let playerSize = tileSize;
 
  function preload(){
     textures[0] = loadImage("clear.png");
-    textures[1] = loadImage("wood.jpg");
-
+    textures[1] = loadImage("platform.png");
+    bg = loadImage("background.jpg");
     playerSprite = loadImage("avatar1.png");
  }
 
  function setup(){
-    createCanvas(1200,400);
+    createCanvas(600,400);
     let tileID= 0;
     for (let across = 0; across < numAcross; across++) {
         tilemap[across] = [];
@@ -63,7 +64,8 @@ let tilemap =[];
  }
 
  function draw(){
-    background(255);
+    background(bg);
+ 
     for (let across = 0; across < numAcross; across++) {
         for (let down = 0; down < numDown; down++) {
             tilemap[across][down].display(); // runs display() method for each tile!
@@ -72,6 +74,24 @@ let tilemap =[];
     }
     player.display();
     player.update();
+    push();
+    textAlign(CENTER);
+    fill(255);
+    textSize(30);
+    text("Time left: "+ timer, 500, 30);
+    pop();
+    //displays the amount of points in the left hand corner and the timer in the right hand corner
+    if (frameCount % 60 == 0 && timer>0){
+        timer--;
+    }
+    if(timer ==0){
+      textAlign(CENTER);
+      push();
+      fill(255);
+      textSize(80);
+      text("You failed!", 300, 200);
+      pop();
+    }
  }
 
 function keyPressed(){
