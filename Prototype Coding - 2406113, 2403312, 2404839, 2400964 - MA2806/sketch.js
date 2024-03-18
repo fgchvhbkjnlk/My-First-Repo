@@ -18,109 +18,103 @@ the comment styles. */
 let tilemap =[];
 let tilemap2 =[];
 let tilemap3 = [];
- const tileSize = 40;
+ const tileSize = 80;
  let playerStartingX = 1; // X position for the player to start
  let playerStartingY = 6; // Y position for the player to start
  let numAcross = 15;
  let numDown = 10;
  let textures =[];
  let boxes = [];
- let timer = 10; // Sets the timer to 60 seconds
- let timer2 = 5;
- let timer3 = 10;
- let level = 1;
+ let timer = 45; // Sets the timer to 60 seconds
+ let timer2 = 30;
+ let timer3 = 20;
+ let level = 0;
  let font;
 
  // Creates the graphics map
  let graphicsMap =[
-//   0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//0
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//1
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//2
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//3
-    [0, 0, 0, 0, 0, 0, 2, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0],//4
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 3, 0, 0, 0],//5
-    [2, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//6
-    [0, 0, 0, 0, 2, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0],//7
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//8
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],//9
-    
+//  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//0
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//1
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//2
+    [0, 0, 0, 0, 0, 0, 2, 1, 1, 1, 1, 3, 0, 0, 0],//3
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//4
+    [0, 2, 1, 1, 1, 3, 0, 0, 0, 0, 0, 2, 1, 1, 3],//5
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//6
+    [0, 0, 0, 0, 0, 2, 1, 1, 3, 0, 0, 0, 0, 0, 0],//7
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//8
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],//9
  ];
 
  let graphicsMap2 =[
-//  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 
-   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//0
-   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//1
-   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//2
-   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//3
-   [0, 2, 1, 1, 1, 3, 0, 2, 1, 1, 3, 0, 0, 0, 0, 0, 0],//4
-   [0, 0, 0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0],//5
-   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//6
-   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 3, 0, 0],//7
-   [0, 2, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//8
-   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],//9
-   
+//  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//0
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//1
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//2
+    [0, 4, 5, 5, 5, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0],//3
+    [0, 0, 0, 0, 0, 0, 0, 4, 5, 5, 6, 0, 0, 0, 0],//4
+    [0, 0, 0, 0, 0, 0, 4, 5, 5, 5, 5, 6, 0, 0, 0],//5
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//6
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5, 5, 6],//7
+    [0, 4, 5, 5, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//8
+    [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],//9
 ];
 
 let graphicsMap3 =[
-//  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 
-   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//0
-   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//1
-   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//2
-   [0, 0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0],//3
-   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//4
-   [0, 0, 2, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//5
-   [0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 3, 0, 0, 0, 0, 0],//6
-   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 3],//7
-   [0, 0, 0, 0, 0, 2, 1, 3, 0, 0, 0, 0, 2, 1, 1, 1, 3],//8
-   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],//9
-   
+//  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//0
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//1
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//2
+    [0, 0, 0, 0, 0, 0, 7, 8, 8, 8, 8, 8, 9, 0, 0],//3
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//4
+    [0, 7, 8, 8, 8, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0],//5
+    [0, 0, 0, 0, 0, 0, 0, 7, 8, 8, 9, 0, 0, 0, 0],//6
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 8, 8, 8],//7
+    [0, 0, 0, 7, 8, 8, 8, 9, 0, 0, 7, 8, 8, 8, 8],//8  
+    [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8],//9
 ];
 
  // Creates the rules for the tiles / platforms
  let tileRules =[
- //  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],//0
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//1
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//2
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//3
-    [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],//4
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0],//5
-    [1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//6
-    [0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//7
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//8
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],//9
- 
+//  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],//0
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//1
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//2
+    [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0],//3
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//4
+    [0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0],//5
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//6
+    [0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0],//7
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//8
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],//9
 ];
 
  let tileRules2 =[
-//  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 
-   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],//0
-   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//1
-   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//2
-   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//3
-   [0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0],//4
-   [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],//5
-   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//6
-   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],//7
-   [0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//8
-   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],//9
-   
+//  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],//0
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//1
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//2
+    [0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//3
+    [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0],//4
+    [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0],//5
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//6
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0],//7
+    [0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//8
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],//9
 ];
 
  let tileRules3 =[
-//  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],//0
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//1
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//2
-    [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],//3
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//4
-    [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//5
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0],//6
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1],//7
-    [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],//8
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],//9
-    
+//  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],//0
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//1
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//2
+    [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0],//3
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//4
+    [0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],//5
+    [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0],//6
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1],//7
+    [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1],//8  
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],//9
  ];
 
  // Player information
@@ -128,7 +122,7 @@ let graphicsMap3 =[
  let playerSprite;
  let xSpeed = 5;
  let ySpeed = 10;
- let jumpHeight = 130;
+ let jumpHeight = 250;
  let playerSize = tileSize;
  let jumpsound = null;
 
@@ -138,19 +132,32 @@ let graphicsMap3 =[
     textures[1] = loadImage("middleshelf.png");
     textures[2] = loadImage("leftshelf.png");
     textures[3] = loadImage("rightshelf.png");
-    textures[4] = loadImage("bottomshelf.png");
+    textures[4] = loadImage("leftshelf2.png");
+    textures[5] = loadImage("middleshelf2.png");
+    textures[6] = loadImage("rightshelf2.png");
+    textures[7] = loadImage("leftshelf3.png");
+    textures[8] = loadImage("middleshelf3.png");
+    textures[9] = loadImage("rightshelf3.png");
     bg = loadImage("background.jpg");
-    bg2 = loadImage("background2.jpg");
-    playerSprite = loadImage("avatar.png");
-    inverseSprite = loadImage("ravatar.png");
+    bg2 = loadImage("background2.png");
+    bg3 = loadImage("background3.jpg");
+    playerSprite = loadImage("avatargif.gif");
+    inverseSprite = loadImage("avatargif2.gif");
     toothbrushImage = loadImage("toothbrush.png");
     coffeeImage = loadImage("coffee.png");
+    cerealImage = loadImage("cereal.png");
+    bookImage = loadImage("books.png");
+    laptopImage = loadImage("laptop.png");
+    phoneImage = loadImage("phone.png");
+    honeyImage = loadImage("honey.png");
+    familyImage = loadImage("family.png");
+    moonImage = loadImage("moon.png");
     jumpsound = new Audio('jumpsound.mp3');
     font =loadFont('pixelfont.TTF');
  }
 
 function setup(){
-let cnv = createCanvas(600,400);
+let cnv = createCanvas(1200,800);
 cnv.center('horizontal');
 let tileID= 0;
 for (let across = 0; across < numAcross; across++) {
@@ -190,14 +197,24 @@ for (let across = 0; across < numAcross; across++) {
 } // Tile creation finished
     
   // Create boxes / the collectibles
-  boxes.push(new Box(120, height - 200, toothbrushImage));
-  boxes.push(new Box(320, height - 300, coffeeImage));
+  boxes.push(new Box(280, 320 , toothbrushImage));
+  boxes.push(new Box(1010, 320, coffeeImage));
+  boxes.push(new Box(680, 175, cerealImage));
+  boxes.push(new Box(400, 650, bookImage));
+  boxes.push(new Box(240, 180, laptopImage));
+  boxes.push(new Box(800, 330, phoneImage));
+  boxes.push(new Box(240, 325, honeyImage));
+  boxes.push(new Box(720, 170, familyImage));
+  boxes.push(new Box(1040, 475, moonImage));
   player = new Player(playerSprite, playerStartingX, playerStartingY, tileSize, xSpeed, ySpeed, jumpHeight, tileSize, tileRules);
   player2 = new Player(playerSprite, playerStartingX, playerStartingY, tileSize, xSpeed, ySpeed, jumpHeight, tileSize, tileRules2);
   player3 = new Player(playerSprite, playerStartingX, playerStartingY, tileSize, xSpeed, ySpeed, jumpHeight, tileSize, tileRules3);    
 }
 function draw(){
 textFont(font);
+if(level== 0){
+    fill(235);
+}
 if(level== 1){
     background(bg);
     for (let across = 0; across < numAcross; across++) {
@@ -208,21 +225,22 @@ if(level== 1){
     }
     player.display();
     player.update();
-    for (let box of boxes) {
-      box.display();
+    for (let i =0; i<3; i++) {
+      boxes[i].display();
       
       // Check for collision with player
-      if (player.checkCollisionBox(box)) {
-        box.isTouched = true;
+      if (player.checkCollisionBox(boxes[i])) {
+        boxes[i].isTouched = true;
       }
     }
 
     // Creates the timer
     push();
-    textAlign(CENTER);
+    textAlign(RIGHT);
     fill(255);
-    textSize(20);
-    text("Time left: "+ timer, 500, 30);
+    textSize(40);
+    text("Time left: "+ timer, 1175, 40);
+    text("Next level ->",1172,770);
     pop();
      // Displays the amount of points in the left hand corner and the timer in the right hand corner
      if (frameCount % 60 == 0 && timer>0){
@@ -232,7 +250,7 @@ if(level== 1){
         level = 4;
     }
     // Displays a failed 'screen' to the player if they don't finish the level in time
-    if(boxes[0].isTouched && boxes[1].isTouched && player.xPos == 550){
+    if(boxes[0].isTouched && boxes[1].isTouched && boxes[2] && player.xPos >=1100){
      level = 2;
    }
 }
@@ -247,33 +265,38 @@ if(level==2){
 
     player2.display();
     player2.update();
-    for (let box of boxes) {
-        box.display();
-              
-        // Check for collision with player
-        if (player2.checkCollisionBox(box)) {
-            box.isTouched = true;
-        }
-    }
+    for (let i =3; i<6; i++) {
+        boxes[i].display();
         
-            // Creates the timer
+        // Check for collision with player
+        if (player2.checkCollisionBox(boxes[i])) {
+          boxes[i].isTouched = true;
+        }
+      }
+        
+    // Creates the timer
     push();
-    textAlign(CENTER);
+    textAlign(RIGHT);
     fill(255);
-    textSize(20);
-    text("Time left: "+ timer2, 500, 30);
+    textSize(40);
+    text("Time left: "+ timer2, 1175, 40);
+    text("Next level ->",1172,770);
     pop();
     // Displays the amount of points in the left hand corner and the timer in the right hand corner
     if (frameCount % 60 == 0 && timer2>0){
         timer2--;
     }
-    if(timer2 == 0){
-        level = 3;
-      }
+    if(timer2==0){
+        level = 4;
+    }
+    // Displays a failed 'screen' to the player if they don't finish the level in time
+    if(boxes[3].isTouched && boxes[4].isTouched && boxes[5] && player2.xPos >=1100){
+     level = 3;
+   }
 }
 
 if(level==3){
-    background(bg);
+    background(bg3);
     for (let across = 0; across < numAcross; across++) {
         for (let down = 0; down < numDown; down++) {
             tilemap3[across][down].display(); // runs display() method for each tile!
@@ -282,28 +305,34 @@ if(level==3){
     }
     player3.display();
     player3.update();
-    for (let box of boxes) {
-        box.display();
+    for (let i =6; i<9; i++) {
+        boxes[i].display();
+        
         // Check for collision with player
-        if (player3.checkCollisionBox(box)) {
-        box.isTouched = true;
+        if (player3.checkCollisionBox(boxes[i])) {
+          boxes[i].isTouched = true;
         }
-    }
+      }
         // Creates the timer
     push();
-    textAlign(CENTER);
+    textAlign(RIGHT);
     fill(255);
-    textSize(20);
-    text("Time left: "+ timer3, 500, 30);
-    pop();
+    textSize(40);
+    text("Time left: "+ timer3, 1175, 40);
+    text("Next level ->",1172,770);
+    pop();    
     // Displays the amount of points in the left hand corner and the timer in the right hand corner
     if (frameCount % 60 == 0 && timer3>0){
         timer3--;
     }
 
-    //if(boxes[0].isTouched && boxes[5].isTouched && player.xPos == 550){
-      //  level = 2;
-      //}
+    if(timer3==0){
+        level = 4;
+    }
+    // Displays a failed 'screen' to the player if they don't finish the level in time
+    if(boxes[6].isTouched && boxes[7].isTouched && boxes[8] && player3.xPos >=1100){
+     level = 5;
+   }
 }
 
 if (level == 4){
@@ -312,9 +341,20 @@ textAlign(CENTER);
 push();
 fill(255);
 textSize(65);
-text("You failed!", 300, 200);
+text("You failed!", 600, 400);
 pop();
 }
+
+if (level == 5){
+    background(200);
+    textAlign(CENTER);
+    push();
+    fill(255);
+    textSize(65);
+    text("Congratulations!", 600, 400);
+    pop();
+    }
+    
 }
 
 
@@ -326,7 +366,7 @@ function keyPressed(){
             player.jumpTarget = player.yPos - player.jumpHeight;
             console.log(player.jumpTarget);
             jumpsound.play();
-        }0
+        }
 
     }
     if (!player2.isJumping && !player2.isFalling && player2.isGrounded) { //checks if player.isJUMPING = false, player.isFalling = false, AND player.isGrounded = true
@@ -452,12 +492,12 @@ class Player{//creating player class
 
     setXdirection(){//creating function to track the horizontal direction the player is moving in
         if (keyIsDown("37")){
-            this.dirX= -1;
+            this.dirX= -1.25;
             this.sprite = inverseSprite;
         }
         //if the left arrow key is down, the player will move to the left
         if (keyIsDown("39")){
-            this.dirX = 1;
+            this.dirX = 1.25;
             this.sprite = playerSprite;
         }
         //if the right arrow is down, the player will move to the right
@@ -479,7 +519,7 @@ class Player{//creating player class
         }
         //if the player is jumping, the player will move upwards
         if (this.isFalling) {
-            this.dirY = 0.5;
+            this.dirY = 0.75;
         }
         //if the player is falling, the player will move downwards
     }
@@ -535,10 +575,6 @@ class Player{//creating player class
     }
 
     move(){//creating a function to move the player sprite
-        //this.yPos += this.ySpeed * this.dirY;
-        //the player moves vertically by adding the value of the speed and the direction multiplied
-        //this.xPos += this.xSpeed * this.dirX;
-        //the player moves horizontally by adding the value of the speed and the direction multiplied
         // Calculate the next position
         let nextX = this.xPos + this.xSpeed * this.dirX;
         let nextY = this.yPos + this.ySpeed * this.dirY;
@@ -641,7 +677,7 @@ class Box {
     constructor(x, y, image) {
       this.x = x;
       this.y = y;
-      this.size = 50;
+      this.size = 80;
       this.image = image;
       this.isTouched = false; //initializes the touched state of the box to false
     }
@@ -649,9 +685,9 @@ class Box {
     display() {
       if (!this.isTouched) { // check the box not have been touched 
         push();
-      imageMode(CENTER); 
-      pop();
-      image(this.image, this.x, this.y, this.size, this.size); // diaplays the position and the size of the image 
-         }
+        imageMode(LEFT); 
+        image(this.image, this.x, this.y, this.size, this.size); // diaplays the position and the size of the image 
+        pop();
+        }
        }
       }
