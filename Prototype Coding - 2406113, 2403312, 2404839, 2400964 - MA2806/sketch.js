@@ -20,7 +20,7 @@ let tilemap2 =[];
 let tilemap3 = [];
  const tileSize = 80;
  let playerStartingX = 1; // X position for the player to start
- let playerStartingY = 6; // Y position for the player to start
+ let playerStartingY = 8; // Y position for the player to start
  let numAcross = 15;
  let numDown = 10;
  let textures =[];
@@ -30,6 +30,11 @@ let tilemap3 = [];
  let timer3 = 20;
  let level = 0;
  let font;
+ let firstY= 450;
+ let secondY= 650;
+ let firstSpeed= 1;
+ let secondSpeed=-1;
+ let song;
 
  // Creates the graphics map
  let graphicsMap =[
@@ -122,7 +127,7 @@ let graphicsMap3 =[
  let playerSprite;
  let xSpeed = 5;
  let ySpeed = 10;
- let jumpHeight = 250;
+ let jumpHeight = 185;
  let playerSize = tileSize;
  let jumpsound = null;
 
@@ -139,8 +144,9 @@ let graphicsMap3 =[
     textures[8] = loadImage("middleshelf3.png");
     textures[9] = loadImage("rightshelf3.png");
     bg = loadImage("background.jpg");
-    bg2 = loadImage("background2.png");
+    bg2 = loadImage("background2.jpg");
     bg3 = loadImage("background3.jpg");
+    playerImage = loadImage("avatar.png");
     playerSprite = loadImage("avatargif.gif");
     inverseSprite = loadImage("avatargif2.gif");
     toothbrushImage = loadImage("toothbrush.png");
@@ -153,6 +159,9 @@ let graphicsMap3 =[
     familyImage = loadImage("family.png");
     moonImage = loadImage("moon.png");
     jumpsound = new Audio('jumpsound.mp3');
+    backgroundSound = new Audio('backgroundmusic.mp3');
+    failSound = new Audio('failtrumpet.mp3');
+    successSound = new Audio('succestrumpet.mp3');
     font =loadFont('pixelfont.TTF');
  }
 
@@ -211,12 +220,50 @@ for (let across = 0; across < numAcross; across++) {
   player3 = new Player(playerSprite, playerStartingX, playerStartingY, tileSize, xSpeed, ySpeed, jumpHeight, tileSize, tileRules3);    
 }
 function draw(){
+background(0);
 textFont(font);
+backgroundSound.play();
 if(level== 0){
-    fill(235);
+    background(247,71,142);
+    push();
+    fill(255);
+    textSize(75);
+    textAlign(CENTER);
+    text("Motivating Mysha!", 600, 100);
+    fill(255, 204, 229);
+    textSize(30);
+    text("Aims:", 600, 170);
+    text("Collect all the tokens", 600, 200); 
+    text("on each level before the time runs out.", 600, 230);
+    text("Controls:", 600, 270);
+    text("Right and Left arrows to move,", 600, 300);
+    text("Space bar to jump.", 600, 330);
+    textSize(25);
+    text("Click anywhere to Start.", 600, 770);
+    pop();
+    imageMode(CENTER);
+    image(playerImage, 250, 550, 400, 400);
+    image(honeyImage, 500, firstY, 200, 200);
+    image(coffeeImage, 650, secondY, 180, 180);
+    image(bookImage, 850, firstY, 210, 210);
+    image(moonImage, 1000, secondY, 180, 180);
+    firstY= firstY+firstSpeed;
+    secondY= secondY+secondSpeed;
+    if(firstY==650){
+        firstSpeed = -1;
+    }
+    if(firstY==450){
+        firstSpeed = 1;
+    }
+    if(secondY==450){
+        secondSpeed = 1;
+    }
+    if(secondY==650){
+        secondSpeed = -1;
+    }
 }
 if(level== 1){
-    background(bg);
+    image(bg, 0,0, 1200,800);
     for (let across = 0; across < numAcross; across++) {
         for (let down = 0; down < numDown; down++) {
             tilemap[across][down].display(); // runs display() method for each tile!
@@ -255,7 +302,7 @@ if(level== 1){
    }
 }
 if(level==2){
-    background(bg2);
+    image(bg2, 0,0, 1200,800);
     for (let across = 0; across < numAcross; across++) {
         for (let down = 0; down < numDown; down++) {
             tilemap2[across][down].display(); // runs display() method for each tile!
@@ -296,7 +343,7 @@ if(level==2){
 }
 
 if(level==3){
-    background(bg3);
+    image(bg3, 0,0, 1200,800);
     for (let across = 0; across < numAcross; across++) {
         for (let down = 0; down < numDown; down++) {
             tilemap3[across][down].display(); // runs display() method for each tile!
@@ -319,7 +366,7 @@ if(level==3){
     fill(255);
     textSize(40);
     text("Time left: "+ timer3, 1175, 40);
-    text("Next level ->",1172,770);
+    text("Finish ->",1172,770);
     pop();    
     // Displays the amount of points in the left hand corner and the timer in the right hand corner
     if (frameCount % 60 == 0 && timer3>0){
@@ -336,17 +383,26 @@ if(level==3){
 }
 
 if (level == 4){
-background(200);
+backgroundSound.pause();
+failSound.play();
+background(247, 71, 142);
 textAlign(CENTER);
 push();
 fill(255);
 textSize(65);
-text("You failed!", 600, 400);
+text("You failed!", 600, 250);
+textSize(40);
+text("Click anywhere to Restart.", 600, 400);
 pop();
+if(mousePressed== true){
+    level=1;
+}
 }
 
 if (level == 5){
-    background(200);
+    backgroundSound.pause();
+    successSound.play();
+    background(247, 71, 142);
     textAlign(CENTER);
     push();
     fill(255);
@@ -452,7 +508,7 @@ class Player{//creating player class
 
     trackCorners(){
         this.playerLeft = this.xPos + this.collisionXPadding;
-        this.playerRight = this.xPos + this.tileSize - 1 - this.collisionXPadding;
+        this.playerRight = this.xPos + this.tileSize - 2 - this.collisionXPadding;
         this.playerTop = this.yPos + this.collisionYPadding;
         this.playerBottom = this.yPos + this.tileSize - 1;
         // this defines each corner of the player sprite using the x and y coordinates and adding padding inside the margin of the player sprite
@@ -492,12 +548,12 @@ class Player{//creating player class
 
     setXdirection(){//creating function to track the horizontal direction the player is moving in
         if (keyIsDown("37")){
-            this.dirX= -1.25;
+            this.dirX= -2;
             this.sprite = inverseSprite;
         }
         //if the left arrow key is down, the player will move to the left
         if (keyIsDown("39")){
-            this.dirX = 1.25;
+            this.dirX = 2;
             this.sprite = playerSprite;
         }
         //if the right arrow is down, the player will move to the right
@@ -515,11 +571,11 @@ class Player{//creating player class
         //if the player is grounded, the player will not move vertically at all
         
         if (this.isJumping) {
-            this.dirY = -1;
+            this.dirY = -1.5;
         }
         //if the player is jumping, the player will move upwards
         if (this.isFalling) {
-            this.dirY = 0.75;
+            this.dirY = 1.5;
         }
         //if the player is falling, the player will move downwards
     }
@@ -685,9 +741,18 @@ class Box {
     display() {
       if (!this.isTouched) { // check the box not have been touched 
         push();
-        imageMode(LEFT); 
+        imageMode(CORNER); 
         image(this.image, this.x, this.y, this.size, this.size); // diaplays the position and the size of the image 
         pop();
         }
        }
       }
+
+function mousePressed(){
+    if(level === 0){
+        level = 1;
+    }
+    if(level === 4){
+        level =1;
+    }
+}
